@@ -1,7 +1,3 @@
-/**
- * @Project: rcp-java
- * @Copyright: ©2017  广州弘度信息科技有限公司. 版权所有
- */
 package com.jj.managesys.controller.sys;
 
 import com.jj.managesys.common.HttpResponse;

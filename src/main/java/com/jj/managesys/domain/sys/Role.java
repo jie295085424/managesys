@@ -5,27 +5,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author huangjunjie
- * @ClassName User
+ * @ClassName Role
  * @Description
  * @Date 2017/12/26.
  */
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable{
+public class Role {
 
     private long id;
-    private String username;
-    private String password;
-    private String realName;
+    private String name;
     private long createBy;
+    private String description;
     private Date createTime;
     private Date updateTime;
 }

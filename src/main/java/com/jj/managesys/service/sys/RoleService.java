@@ -1,15 +1,13 @@
 package com.jj.managesys.service.sys;
 
-
-import com.jj.managesys.domain.sys.User;
+import com.jj.managesys.domain.sys.Role;
 import com.jj.managesys.service.CrudService;
 
 /**
  * @author huangjunjie
- * @ClassName UserService
+ * @ClassName RoleService
  * @Description
  * @Date 2017/12/26.
  */
-public interface UserService extends CrudService<User> {
-
+public interface RoleService extends CrudService<Role> {
 }
