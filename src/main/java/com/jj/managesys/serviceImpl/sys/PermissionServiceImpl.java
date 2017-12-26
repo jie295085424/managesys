@@ -8,6 +8,7 @@ import com.jj.managesys.serviceImpl.CrudServiceImpl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -18,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Log4j2
 @Service
-@Transactional(rollbackFor = Exception.class)
+@Transactional(rollbackFor = TransactionException.class)
 public class PermissionServiceImpl extends CrudServiceImpl<Permission> implements PermissionService {
     @Autowired
     private PermissionMapper permissionMapper;

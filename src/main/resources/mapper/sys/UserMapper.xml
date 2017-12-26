@@ -16,13 +16,44 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jj.managesys.mapper.sys.UserMapper">
 
+    <sql id="columns">
+        id, username, password, real_name AS "realName", create_by AS "createBy",
+        create_time AS "createTime", update_time AS "updateTime"
+    </sql>
+
     <insert id="save" parameterType="User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sys_user (username, password, real_name, create_by)
         VALUES (#{username}, #{password}, #{realName}, #{createBy})
     </insert>
 
-    <select id="selectById" resultType="User">
+    <select id="selectById" parameterType="java.lang.Long" resultType="User">
+        SELECT <include refid="columns" /> FROM sys_user
+        WHERE id=#{id}
+    </select>
 
+    <select id="selectAll" parameterType="User" resultType="User">
+        SELECT <include refid="columns" /> FROM sys_user
+    </select>
+
+    <update id="update" parameterType="User">
+        UPDATE sys_user
+        <set>
+            <if test="password != null and password ！= ''">
+                password=#{password}
+            </if>
+            <if test="realName != null and realName ！= ''">
+                password=#{realName}
+            </if>
+        </set>
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM sys_user WHERE id=#{id}
+    </delete>
+
+    <select id="selectByUsername" parameterType="java.lang.String" resultType="User">
+        SELECT <include refid="columns" /> FROM  sys_user
+        WHERE username=#{username}
     </select>
 
 </mapper>

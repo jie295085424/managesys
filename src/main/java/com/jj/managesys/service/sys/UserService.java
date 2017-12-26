@@ -12,4 +12,5 @@ import com.jj.managesys.service.CrudService;
  */
 public interface UserService extends CrudService<User> {
 
+    User selectByUsername(String username);
 }

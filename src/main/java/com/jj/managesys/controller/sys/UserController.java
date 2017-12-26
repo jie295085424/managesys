@@ -1,6 +1,7 @@
 package com.jj.managesys.controller.sys;
 
 import com.jj.managesys.common.HttpResponse;
+import com.jj.managesys.common.enums.ResponseCodeEnum;
 import com.jj.managesys.domain.sys.User;
 import com.jj.managesys.service.sys.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -24,8 +25,11 @@ public class UserController {
     @PostMapping("/user")
     public HttpResponse save(User user) {
         HttpResponse response = new HttpResponse();
-        userService.save(user);
-        response.setData(user);
+        if( userService.save(user) != 0) {
+            response.setData(user);
+            return response;
+        }
+        response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;
     }
 
@@ -35,4 +39,32 @@ public class UserController {
         response.setData(userService.selectById(id));
         return response;
     }
+
+    @GetMapping("/user")
+    public HttpResponse selectAll() {
+        HttpResponse response = new HttpResponse();
+        response.setData(userService.selectAll());
+        return response;
+    }
+
+    @PutMapping("/user")
+    public HttpResponse update(@RequestBody User user) {
+        HttpResponse response = new HttpResponse();
+        if(userService.update(user) != 0) {
+            return response;
+        }
+        response.setCodeMessage(ResponseCodeEnum.ERROR);
+        return response;
+    }
+
+    @DeleteMapping("/user/{id}")
+    public HttpResponse delete(@PathVariable long id) {
+        HttpResponse response = new HttpResponse();
+        if(userService.delete(id) != 0) {
+            return response;
+        }
+        response.setCodeMessage(ResponseCodeEnum.ERROR);
+        return response;
+    }
+
 }

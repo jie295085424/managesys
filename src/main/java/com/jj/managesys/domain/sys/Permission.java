@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @author huangjunjie
  * @ClassName Permission
@@ -19,7 +21,11 @@ public class Permission {
 
     private long id;
     private String name;
-    private String method;
+    private int method;
     private String href;
     private String description;
+    private long createBy;
+    private Date createTime;
+    private Date updateTime;
+
 }

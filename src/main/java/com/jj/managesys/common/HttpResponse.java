@@ -1,5 +1,6 @@
 package com.jj.managesys.common;
 
+import com.jj.managesys.common.enums.ResponseCodeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +23,8 @@ public class HttpResponse<T> {
         this.message = "操作成功！";
     }
 
-    public HttpResponse(ResponseCodeEnum codeEnum) {
+
+    public void setCodeMessage(ResponseCodeEnum codeEnum) {
         this.code = codeEnum.getCode();
         this.message = codeEnum.getMessage();
     }
