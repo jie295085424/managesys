@@ -21,7 +21,8 @@ public enum  ResponseCodeEnum {
     LOGIN_ERROR(10404, "登录失败！"),
 
     TOKEN_NOT_EXISTS(10405, "token不存在！"),
-    TOKEN_ERROR(10406, "token已过时或无效！");
+    TOKEN_ERROR(10406, "token已过时或无效！"),
+    PERMISSION_DENIED(10407, "权限不足，拒绝访问！");
 
     private int code;
     private String message;

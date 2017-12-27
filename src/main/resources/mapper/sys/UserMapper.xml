@@ -38,13 +38,14 @@
     <update id="update" parameterType="User">
         UPDATE sys_user
         <set>
-            <if test="password != null and password ！= ''">
-                password=#{password}
+            <if test="password != null and password != ''">
+                password=#{password},
             </if>
-            <if test="realName != null and realName ！= ''">
-                password=#{realName}
+            <if test="realName != null and realName != ''">
+                real_name=#{realName}
             </if>
         </set>
+        WHERE id=#{id}
     </update>
 
     <delete id="delete" parameterType="java.lang.Long">
