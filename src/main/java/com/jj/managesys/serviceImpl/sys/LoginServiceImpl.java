@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author huangjunjie
@@ -32,14 +33,15 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String login(User user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
         if(StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
             return ResponseCodeEnum.LOGIN_USERNAME_PASSWORD_NOT_EXISTS.getMessage();
         }
         if(!validateUser(user)) {
             return ResponseCodeEnum.LOGIN_USERNAME_PASSWORD_ERROR.getMessage();
         }
-        String token = TokenUtils.getToken(user.getUsername());
-        redisTemplate.opsForSet().add(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token, user.getUsername());
+        String token = TokenUtils.getInstance().getToken();
+        redisTemplate.opsForValue().set(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token, user.getUsername(), 7L, TimeUnit.DAYS);
         return token;
     }
 
@@ -49,11 +51,13 @@ public class LoginServiceImpl implements LoginService {
         if(userInDB == null) {
             return false;
         } else {
-            return EncryUtils.decrypt(user.getPassword(), userInDB.getPassword());
+            return EncryUtils.getInstance().decrypt(user.getPassword(), userInDB.getPassword());
         }
     }
 
     @Override
     public void logout(String token) {
+
+        redisTemplate.delete(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token);
     }
 }

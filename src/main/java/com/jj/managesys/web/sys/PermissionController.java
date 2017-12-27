@@ -1,4 +1,4 @@
-package com.jj.managesys.controller.sys;
+package com.jj.managesys.web.sys;
 
 import com.jj.managesys.common.HttpResponse;
 import com.jj.managesys.common.enums.ResponseCodeEnum;

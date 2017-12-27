@@ -40,7 +40,7 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
 
         int isSuccess = 0;
         try {
-            String encrypwd = EncryUtils.encrypt(user.getPassword());
+            String encrypwd = EncryUtils.getInstance().encrypt(user.getPassword());
             user.setPassword(encrypwd);
             isSuccess = userMapper.save(user);
         } catch (Exception e) {

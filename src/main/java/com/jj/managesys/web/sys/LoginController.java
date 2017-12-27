@@ -1,4 +1,4 @@
-package com.jj.managesys.controller.sys;
+package com.jj.managesys.web.sys;
 
 import com.jj.managesys.common.HttpResponse;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
@@ -6,6 +6,7 @@ import com.jj.managesys.domain.sys.User;
 import com.jj.managesys.service.sys.LoginService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public HttpResponse login(User user) {
+
         HttpResponse response = new HttpResponse();
         try {
             String result = loginService.login(user);
@@ -43,5 +45,12 @@ public class LoginController {
             response.setCodeMessage(ResponseCodeEnum.LOGIN_ERROR);
         }
         return response;
+    }
+
+    @DeleteMapping("/logout")
+    public HttpResponse logout(String token) {
+
+        loginService.logout(token);
+        return new HttpResponse();
     }
 }

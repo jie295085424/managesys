@@ -16,9 +16,12 @@ public class EncryUtils {
     private EncryUtils() {
     }
 
-    private static final EncryUtils instance = new EncryUtils();
+    private static EncryUtils instance = null;
 
     public static EncryUtils getInstance() {
+        if(instance == null) {
+            instance = new EncryUtils();
+        }
         return instance;
     }
 
@@ -26,7 +29,7 @@ public class EncryUtils {
     private static final Integer SALT_LENGTH = 12;
 
 
-    public static String encrypt(String password)
+    public String encrypt(String password)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         //声明加密后的口令数组变量
@@ -57,7 +60,7 @@ public class EncryUtils {
         return byteToHexString(pwd);
     }
 
-    public static boolean decrypt(String password, String passwordInDb)
+    public boolean decrypt(String password, String passwordInDb)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
         //将16进制字符串格式口令转换成字节数组
@@ -93,7 +96,7 @@ public class EncryUtils {
      * @param hex
      * @return
      */
-    public static byte[] hexStringToByte(String hex) {
+    public byte[] hexStringToByte(String hex) {
         int len = (hex.length() / 2);
         byte[] result = new byte[len];
         char[] hexChars = hex.toCharArray();
@@ -110,7 +113,7 @@ public class EncryUtils {
      * @param b
      * @return
      */
-    public static String byteToHexString(byte[] b) {
+    public String byteToHexString(byte[] b) {
         StringBuffer hexString = new StringBuffer();
         for (int i = 0; i < b.length; i++) {
             String hex = Integer.toHexString(b[i] & 0xFF);

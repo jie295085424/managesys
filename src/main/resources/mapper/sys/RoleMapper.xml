@@ -22,7 +22,7 @@
 
     <insert id="save" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sys_role (name, description, create_by)
-        VALUES (#{name}, #{description}, #{create_by})
+        VALUES (#{name}, #{description}, #{createBy})
     </insert>
 
     <select id="selectById" parameterType="java.lang.Long" resultType="Role">
