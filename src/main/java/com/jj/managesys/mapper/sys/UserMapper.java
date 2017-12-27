@@ -4,6 +4,7 @@ import com.jj.managesys.domain.sys.Role;
 import com.jj.managesys.domain.sys.User;
 import com.jj.managesys.mapper.CrudMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,6 +17,6 @@ import java.util.List;
 @Mapper
 public interface UserMapper extends CrudMapper<User> {
 
-    User selectByUsername(String username);
+    User selectByUsername(@Param(value = "username") String username);
 
 }

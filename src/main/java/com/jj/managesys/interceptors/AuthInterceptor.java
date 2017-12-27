@@ -5,6 +5,7 @@
 package com.jj.managesys.interceptors;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.jj.managesys.common.HttpResponse;
 import com.jj.managesys.common.enums.RedisTopicEnum;
 import com.jj.managesys.common.enums.ResponseCodeEnum;

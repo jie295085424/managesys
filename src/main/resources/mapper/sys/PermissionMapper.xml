@@ -57,7 +57,7 @@
         DELETE FROM sys_permission WHERE id=#{id}
     </delete>
 
-    <select id="getPermissions" parameterType="java.lang.Long" resultType="Permission">
+    <select id="getPermissionsByRoleId" parameterType="java.lang.Long" resultType="Permission">
         SELECT p.id, p.name, p.method, p.href, p.description, p.create_by AS "createBy", p.create_time AS "createTime", p.update_time AS "updateTime"
         FROM sys_role AS r, sys_permission AS  p, sys_role_permission AS rp
         WHERE r.id=#{roleId} AND r.id=rp.role_id AND p.id=rp.permission_id

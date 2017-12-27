@@ -16,5 +16,5 @@ import java.util.List;
 @Mapper
 public interface PermissionMapper extends CrudMapper<Permission> {
 
-    List<Permission> getPermissionsByRoleId(Long roleId);
+    List<Permission> getPermissionsByRoleId(long roleId);
 }

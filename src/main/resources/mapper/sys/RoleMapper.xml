@@ -52,7 +52,7 @@
         DELETE FROM sys_role WHERE id=#{id}
     </delete>
 
-    <select id="getRoleNames" parameterType="User" resultType="java.lang.String">
+    <select id="getRoleNamesByUser" parameterType="User" resultType="java.lang.String">
         SELECT r.name FROM sys_user AS u, sys_role AS r, sys_role_user AS ru
         <where>
             <if test="id != 0">
@@ -65,7 +65,7 @@
         </where>
     </select>
 
-    <select id="getRoleIds" parameterType="java.lang.String" resultType="java.lang.Long">
+    <select id="getRoleIdsByUsername" parameterType="java.lang.String" resultType="java.lang.Long">
         SELECT r.id FROM sys_user AS u, sys_role AS r, sys_role_user AS ru
         <where>
             <if test="username != null and username != ''">
