@@ -21,19 +21,37 @@ public class TokenUtils {
     private static TokenUtils instance = null;
 
     public static TokenUtils getInstance() {
+
         if(instance == null) {
             instance = new TokenUtils();
         }
+
         return instance;
     }
 
     public String getToken() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
         while (true) {
+
             String token = UUID.randomUUID().toString().replaceAll("-","");
-            if(SpringHelper.getBean(StringRedisTemplate.class).opsForValue().get(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token) != null) {
-                continue;
-            }
+
+            if(SpringHelper.getBean(StringRedisTemplate.class).opsForValue().get(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token) != null) { continue; }
+
             return token;
         }
+    }
+
+    public boolean validate(String token) {
+
+        if(SpringHelper.getBean(StringRedisTemplate.class).opsForValue().get(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token) != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getAuth(String token) {
+
+        return SpringHelper.getBean(StringRedisTemplate.class).opsForValue().get(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token);
     }
 }
