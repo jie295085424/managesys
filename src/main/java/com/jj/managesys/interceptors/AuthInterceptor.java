@@ -27,7 +27,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if(token == null) {
             return false;
         }
-
+        
         return true;
     }
 
