@@ -60,8 +60,8 @@
 
     <select id="getRoleByUsername" parameterType="java.lang.String" resultType="Role">
         SELECT r.id, r.name, r.description, r.create_by AS "createBy", r.parents, r.create_time AS "createTime", r.update_time AS "updateTime"
-        FROM sys_user AS u, sys_role AS r, sys_role_user AS ru
-        WHERE  u.username=#{username} AND u.id=ru.user_id AND r.id=ru.role_id
+        FROM sys_user AS u, sys_role AS r
+        WHERE  u.username=#{username} AND u.role_id=r.id
     </select>
 
 </mapper>
