@@ -2,6 +2,7 @@ package com.jj.managesys.web.sys;
 
 import com.jj.managesys.common.HttpResponse;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
+import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.domain.sys.User;
 import com.jj.managesys.service.sys.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -25,10 +26,16 @@ public class UserController {
     @PostMapping("/user")
     public HttpResponse save(User user, String token) {
         HttpResponse response = new HttpResponse();
-        if( userService.save(user, token) != 0) {
-            response.setData(user);
-            return response;
+
+        try {
+            if( userService.save(user, token) != 0) {
+                response.setData(user);
+                return response;
+            }
+        } catch (BadRequestException e) {
+            log.error(e);
         }
+
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;
     }
