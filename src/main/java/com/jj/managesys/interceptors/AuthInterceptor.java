@@ -50,6 +50,11 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        String username = JSON.parseObject(TokenUtils.getInstance().getAuth(token)).get("username").toString();
+        if("root".equals(username.trim())) {
+            return true;
+        }
+
         String method = httpServletRequest.getMethod();
         String href = httpServletRequest.getRequestURI();
         int isPermit = 0;
@@ -68,7 +73,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         UserService userService = SpringHelper.getBean(UserService.class);
-        List<Permission> permissionsInDB = userService.getPermissionsByUsername(JSON.parseObject(TokenUtils.getInstance().getAuth(token)).get("username").toString());
+        List<Permission> permissionsInDB = userService.getPermissionsByUsername(username);
         isPermit = permissionsInDB.parallelStream()
                          .filter(permission -> href.startsWith(permission.getHref()) && method.equals(permission.getMethod()))
                          .collect(toList()).size();

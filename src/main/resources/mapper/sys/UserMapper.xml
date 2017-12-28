@@ -17,13 +17,13 @@
 <mapper namespace="com.jj.managesys.mapper.sys.UserMapper">
 
     <sql id="columns">
-        id, username, password, real_name AS "realName", create_by AS "createBy",
+        id, username, password, real_name AS "realName", role_id AS "roleId", create_by AS "createBy",
         create_time AS "createTime", update_time AS "updateTime"
     </sql>
 
     <insert id="save" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO sys_user (username, password, real_name, create_by)
-        VALUES (#{username}, #{password}, #{realName}, #{createBy})
+        INSERT INTO sys_user (username, password, real_name, role_id, create_by)
+        VALUES (#{username}, #{password}, #{realName}, #{roleId}, #{createBy})
     </insert>
 
     <select id="selectById" parameterType="java.lang.Long" resultType="User">

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor = TransactionException.class)
 public class PermissionServiceImpl extends CrudServiceImpl<Permission> implements PermissionService {
+
     @Autowired
     private PermissionMapper permissionMapper;
     @Override

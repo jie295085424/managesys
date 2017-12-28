@@ -1,5 +1,6 @@
 package com.jj.managesys.service.sys;
 
+import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.domain.sys.User;
 
 import java.io.UnsupportedEncodingException;
@@ -12,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public interface LoginService {
 
-    String login(User user) throws UnsupportedEncodingException, NoSuchAlgorithmException;
+    String login(User user) throws UnsupportedEncodingException, NoSuchAlgorithmException, BadRequestException;
 
     void logout(String token);
 }

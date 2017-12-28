@@ -2,6 +2,7 @@ package com.jj.managesys.web.sys;
 
 import com.jj.managesys.common.HttpResponse;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
+import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.domain.sys.Role;
 import com.jj.managesys.service.sys.RoleService;
 import lombok.extern.log4j.Log4j2;
@@ -23,34 +24,42 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/role")
-    public HttpResponse save(Role role) {
+    public HttpResponse save(Role role, String token) {
+
         HttpResponse response = new HttpResponse();
-        if(roleService.save(role) != 0) {
-            response.setData(role);
-            return response;
+
+        try {
+            if(roleService.save(role, token) != 0) {
+                response.setData(role);
+                return response;
+            }
         }
+        catch (BadRequestException e) {
+            log.error(e);
+        }
+
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;
     }
 
     @GetMapping("/role/{id}")
-    public HttpResponse selectById(@PathVariable long id) {
+    public HttpResponse selectById(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        response.setData(roleService.selectById(id));
+        response.setData(roleService.selectById(id,token));
         return response;
     }
 
     @GetMapping("/role")
-    public HttpResponse selectAll() {
+    public HttpResponse selectAll(int pageNum, int pageSize, String token) {
         HttpResponse response = new HttpResponse();
-        response.setData(roleService.selectAll());
+        response.setData(roleService.selectAll(pageNum, pageSize, token));
         return response;
     }
 
     @PutMapping("/role")
-    public HttpResponse update(@RequestBody Role role) {
+    public HttpResponse update(@RequestBody Role role, String token) {
         HttpResponse response = new HttpResponse();
-        if(roleService.update(role) != 0) {
+        if(roleService.update(role, token) != 0) {
             return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
@@ -58,9 +67,9 @@ public class RoleController {
     }
 
     @DeleteMapping("/role/{id}")
-    public HttpResponse delete(@PathVariable long id) {
+    public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        if(roleService.delete(id) != 0) {
+        if(roleService.delete(id, token) != 0) {
             return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);

@@ -23,9 +23,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/user")
-    public HttpResponse save(User user) {
+    public HttpResponse save(User user, String token) {
         HttpResponse response = new HttpResponse();
-        if( userService.save(user) != 0) {
+        if( userService.save(user, token) != 0) {
             response.setData(user);
             return response;
         }
@@ -34,23 +34,23 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
-    public HttpResponse selectById(@PathVariable long id) {
+    public HttpResponse selectById(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        response.setData(userService.selectById(id));
+        response.setData(userService.selectById(id, token));
         return response;
     }
 
     @GetMapping("/user")
-    public HttpResponse selectAll() {
+    public HttpResponse selectAll(int pageNum, int pageSize, String token) {
         HttpResponse response = new HttpResponse();
-        response.setData(userService.selectAll());
+        response.setData(userService.selectAll(pageNum, pageSize, token));
         return response;
     }
 
     @PutMapping("/user")
-    public HttpResponse update(@RequestBody User user) {
+    public HttpResponse update(@RequestBody User user, String token) {
         HttpResponse response = new HttpResponse();
-        if(userService.update(user) != 0) {
+        if(userService.update(user, token) != 0) {
             return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
@@ -58,9 +58,9 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
-    public HttpResponse delete(@PathVariable long id) {
+    public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        if(userService.delete(id) != 0) {
+        if(userService.delete(id, token) != 0) {
             return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);

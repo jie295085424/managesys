@@ -17,7 +17,7 @@ public interface UserService extends CrudService<User> {
 
     User selectByUsername(String username);
 
-    List<String> getRoleNames(User user);
-
     List<Permission> getPermissionsByUsername(String username);
+
+    String getRoleName(User user);
 }

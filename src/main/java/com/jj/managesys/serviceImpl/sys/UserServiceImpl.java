@@ -42,7 +42,7 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
     }
 
     @Override
-    public int save(User user) {
+    public int save(User user, String token) {
 
         int isSuccess = 0;
         try {
@@ -55,7 +55,7 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
     }
 
     @Override
-    public int update(User user) {
+    public int update(User user, String token) {
 
         int isSuccess = 0;
         try {
@@ -72,12 +72,6 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
         return userMapper.selectByUsername(username);
     }
 
-    @Override
-    public List<String> getRoleNames(User user) {
-
-        RoleMapper roleMapper = SpringHelper.getBean(RoleMapper.class);
-        return roleMapper.getRoleNamesByUser(user);
-    }
 
     @Override
     public List<Permission> getPermissionsByUsername(String username) {
@@ -90,5 +84,15 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
             permissions.addAll(permissionMapper.getPermissionsByRoleId(roleId));
         }
         return new ArrayList<>(permissions);
+    }
+
+    @Override
+    public String getRoleName(User user) {
+
+        if(user.getRoleId() == 0) {
+            user = userMapper.selectByUsername(user.getUsername());
+        }
+        RoleMapper roleMapper = SpringHelper.getBean(RoleMapper.class);
+        return roleMapper.selectById(user.getRoleId()).getName();
     }
 }

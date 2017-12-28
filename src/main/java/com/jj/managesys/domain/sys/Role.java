@@ -22,6 +22,7 @@ public class Role {
     private long id;
     private String name;
     private long createBy;
+    private String parents;
     private String description;
     private Date createTime;
     private Date updateTime;

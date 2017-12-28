@@ -17,12 +17,12 @@
 <mapper namespace="com.jj.managesys.mapper.sys.RoleMapper">
 
     <sql id="columns">
-        id, name, description, create_by AS "createBy", create_time AS "createTime", update_time AS "updateTime"
+        id, name, description, create_by AS "createBy", parents, create_time AS "createTime", update_time AS "updateTime"
     </sql>
 
     <insert id="save" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO sys_role (name, description, create_by)
-        VALUES (#{name}, #{description}, #{createBy})
+        INSERT INTO sys_role (name, parents, description, create_by)
+        VALUES (#{name}, #{parents}, #{description}, #{createBy})
     </insert>
 
     <select id="selectById" parameterType="java.lang.Long" resultType="Role">
@@ -52,27 +52,10 @@
         DELETE FROM sys_role WHERE id=#{id}
     </delete>
 
-    <select id="getRoleNamesByUser" parameterType="User" resultType="java.lang.String">
-        SELECT r.name FROM sys_user AS u, sys_role AS r, sys_role_user AS ru
-        <where>
-            <if test="id != 0">
-                u.id=#{id}
-            </if>
-            <if test="username != null and username != ''">
-                u.username=#{username}
-            </if>
-            AND u.id=ru.user_id AND r.id=ru.role_id
-        </where>
-    </select>
 
-    <select id="getRoleIdsByUsername" parameterType="java.lang.String" resultType="java.lang.Long">
-        SELECT r.id FROM sys_user AS u, sys_role AS r, sys_role_user AS ru
-        <where>
-            <if test="username != null and username != ''">
-                u.username=#{username}
-            </if>
-            AND u.id=ru.user_id AND r.id=ru.role_id
-        </where>
+    <select id="getRoleByName" parameterType="java.lang.String" resultType="Role">
+        SELECT <include refid="columns" /> FROM sys_role
+        WHERE name=#{name}
     </select>
 
 

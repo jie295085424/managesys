@@ -2,6 +2,7 @@ package com.jj.managesys.web.sys;
 
 import com.jj.managesys.common.HttpResponse;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
+import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.domain.sys.Permission;
 import com.jj.managesys.service.sys.PermissionService;
 import lombok.extern.log4j.Log4j2;
@@ -23,34 +24,43 @@ public class PermissionController {
     private PermissionService permissionService;
 
     @PostMapping("/permission")
-    public HttpResponse save(Permission permission) {
+    public HttpResponse save(Permission permission, String token) {
+
         HttpResponse response = new HttpResponse();
-        if (permissionService.save(permission) != 0) {
-            response.setData(permission);
-            return response;
+
+        try {
+            if (permissionService.save(permission, token) != 0) {
+                response.setData(permission);
+                return response;
+            }
         }
+        catch (BadRequestException e) {
+            log.error(e);
+        }
+
         response.setCodeMessage(ResponseCodeEnum.ERROR);
+
         return response;
     }
 
     @GetMapping("/permission/{id}")
-    public HttpResponse selectById(@PathVariable long id) {
+    public HttpResponse selectById(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        response.setData(permissionService.selectById(id));
+        response.setData(permissionService.selectById(id, token));
         return response;
     }
 
     @GetMapping("/permission")
-    public HttpResponse selectAll() {
+    public HttpResponse selectAll(int pageNum, int pageSize, String token) {
         HttpResponse response = new HttpResponse();
-        response.setData(permissionService.selectAll());
+        response.setData(permissionService.selectAll(pageNum, pageSize, token));
         return response;
     }
 
     @PutMapping("/permission")
-    public HttpResponse update(@RequestBody Permission permission) {
+    public HttpResponse update(@RequestBody Permission permission, String token) {
         HttpResponse response = new HttpResponse();
-        if (permissionService.update(permission) != 0) {
+        if (permissionService.update(permission, token) != 0) {
             return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
@@ -58,9 +68,9 @@ public class PermissionController {
     }
 
     @DeleteMapping("/permission/{id}")
-    public HttpResponse delete(@PathVariable long id) {
+    public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        if (permissionService.delete(id) != 0) {
+        if (permissionService.delete(id,token) != 0) {
             return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);

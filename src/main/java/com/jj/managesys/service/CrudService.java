@@ -1,6 +1,8 @@
 package com.jj.managesys.service;
 
-import java.util.List;
+import com.github.pagehelper.Page;
+import com.jj.managesys.common.exceptions.BadRequestException;
+
 
 /**
  * @author huangjunjie
@@ -10,14 +12,14 @@ import java.util.List;
  */
 public interface CrudService<T> {
 
-    T selectById(long id);
+    T selectById(long id, String token);
 
-    List<T> selectAll();
+    Page<T> selectAll(int pageNum, int pageSize, String token);
 
-    int save(T t);
+    int save(T t, String token) throws BadRequestException;
 
-    int update(T t);
+    int update(T t, String token);
 
-    int delete(long id);
+    int delete(long id, String token);
 
 }
