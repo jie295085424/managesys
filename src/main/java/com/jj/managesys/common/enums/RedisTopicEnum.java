@@ -12,7 +12,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum RedisTopicEnum {
 
-    TOKEN_TOPIC("token:");
+    TOKEN_TOPIC("token:"),
+    PERMISSION_TOPIC("permissions:");
 
     private String topic;
 

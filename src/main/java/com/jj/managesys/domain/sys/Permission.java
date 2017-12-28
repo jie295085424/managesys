@@ -21,7 +21,7 @@ public class Permission {
 
     private long id;
     private String name;
-    private int method;
+    private String method;
     private String href;
     private String description;
     private long createBy;

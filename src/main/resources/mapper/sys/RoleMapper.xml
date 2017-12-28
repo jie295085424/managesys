@@ -37,17 +37,43 @@
     <update id="update" parameterType="Role">
         UPDATE sys_role
         <set>
-            <if test="name != null and name ！= ''">
-                name=#{name}
+            <if test="name != null and name != ''">
+                name=#{name},
             </if>
-            <if test="description != null and description ！= ''">
+            <if test="description != null and description != ''">
                 description=#{description}
             </if>
+            WHERE id=#{id}
         </set>
+
     </update>
 
     <delete id="delete" parameterType="java.lang.Long">
         DELETE FROM sys_role WHERE id=#{id}
     </delete>
+
+    <select id="getRoleNamesByUser" parameterType="User" resultType="java.lang.String">
+        SELECT r.name FROM sys_user AS u, sys_role AS r, sys_role_user AS ru
+        <where>
+            <if test="id != 0">
+                u.id=#{id}
+            </if>
+            <if test="username != null and username != ''">
+                u.username=#{username}
+            </if>
+            AND u.id=ru.user_id AND r.id=ru.role_id
+        </where>
+    </select>
+
+    <select id="getRoleIdsByUsername" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT r.id FROM sys_user AS u, sys_role AS r, sys_role_user AS ru
+        <where>
+            <if test="username != null and username != ''">
+                u.username=#{username}
+            </if>
+            AND u.id=ru.user_id AND r.id=ru.role_id
+        </where>
+    </select>
+
 
 </mapper>

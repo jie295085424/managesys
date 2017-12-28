@@ -1,5 +1,7 @@
 package com.jj.managesys.serviceImpl.sys;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.jj.managesys.common.enums.RedisTopicEnum;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
 import com.jj.managesys.common.utils.EncryUtils;
@@ -15,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,7 +44,11 @@ public class LoginServiceImpl implements LoginService {
             return ResponseCodeEnum.LOGIN_USERNAME_PASSWORD_ERROR.getMessage();
         }
         String token = TokenUtils.getInstance().getToken();
-        redisTemplate.opsForValue().set(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token, user.getUsername(), 7L, TimeUnit.DAYS);
+        List<String> roleNames = userService.getRoleNames(user);
+        JSONObject jo = new JSONObject();
+        jo.put("roleNames", roleNames);
+        jo.put("username", user.getUsername());
+        redisTemplate.opsForValue().set(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token, jo.toJSONString(), 7L, TimeUnit.DAYS);
         return token;
     }
 

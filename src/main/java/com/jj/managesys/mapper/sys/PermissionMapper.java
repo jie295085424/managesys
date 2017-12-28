@@ -4,6 +4,9 @@ import com.jj.managesys.domain.sys.Permission;
 import com.jj.managesys.mapper.CrudMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * @author huangjunjie
  * @ClassName PermissionMapper
@@ -12,4 +15,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PermissionMapper extends CrudMapper<Permission> {
+
+    List<Permission> getPermissionsByRoleId(long roleId);
 }
