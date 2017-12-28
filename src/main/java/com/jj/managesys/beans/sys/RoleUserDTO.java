@@ -4,6 +4,8 @@
  */
 package com.jj.managesys.beans.sys;
 
+import com.jj.managesys.domain.sys.Role;
+import com.jj.managesys.domain.sys.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,17 +13,16 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author huangjunjie
- * @ClassName UserRole
+ * @ClassName RoleUserDTO
  * @Description
- * @Date 2017/12/27.
+ * @Date 2017/12/28.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRole {
+public class RoleUserDTO {
 
-    private long id;
-    private long roleId;
-    private long userId;
+    private Role role;
+    private User user;
 }

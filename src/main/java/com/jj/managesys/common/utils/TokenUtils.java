@@ -1,8 +1,11 @@
 package com.jj.managesys.common.utils;
 
 
+import com.alibaba.fastjson.JSON;
+import com.jj.managesys.beans.sys.RoleUserDTO;
 import com.jj.managesys.common.enums.RedisTopicEnum;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -50,8 +53,9 @@ public class TokenUtils {
         }
     }
 
-    public String getAuth(String token) {
+    public RoleUserDTO getRoleUser(String token) {
 
-        return SpringHelper.getBean(StringRedisTemplate.class).opsForValue().get(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token);
+        return JSON.parseObject(SpringHelper.getBean(StringRedisTemplate.class).opsForValue().get(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token), RoleUserDTO.class);
     }
+
 }

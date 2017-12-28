@@ -24,20 +24,20 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/role")
-    public HttpResponse save(Role role, String token) {
+    public HttpResponse save(Role role, String token)  {
 
         HttpResponse response = new HttpResponse();
-
         try {
-            if(roleService.save(role, token) != 0) {
+            if (roleService.save(role, token) != 0) {
                 response.setData(role);
                 return response;
             }
         }
         catch (BadRequestException e) {
-            log.error(e);
+            if(e.getMessage().equals(ResponseCodeEnum.ROLE_SAVE_NAME_EXIST.getMessage())) {
+                response.setCodeMessage(ResponseCodeEnum.ROLE_SAVE_NAME_EXIST);
+            }
         }
-
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;
     }
@@ -45,7 +45,7 @@ public class RoleController {
     @GetMapping("/role/{id}")
     public HttpResponse selectById(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        response.setData(roleService.selectById(id,token));
+        response.setData(roleService.selectById(id, token));
         return response;
     }
 
@@ -59,7 +59,7 @@ public class RoleController {
     @PutMapping("/role")
     public HttpResponse update(@RequestBody Role role, String token) {
         HttpResponse response = new HttpResponse();
-        if(roleService.update(role, token) != 0) {
+        if (roleService.update(role, token) != 0) {
             return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
@@ -69,7 +69,7 @@ public class RoleController {
     @DeleteMapping("/role/{id}")
     public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        if(roleService.delete(id, token) != 0) {
+        if (roleService.delete(id, token) != 0) {
             return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);

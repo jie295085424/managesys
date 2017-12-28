@@ -24,22 +24,13 @@ public class PermissionController {
     private PermissionService permissionService;
 
     @PostMapping("/permission")
-    public HttpResponse save(Permission permission, String token) {
-
+    public HttpResponse save(Permission permission, String token) throws BadRequestException {
         HttpResponse response = new HttpResponse();
-
-        try {
-            if (permissionService.save(permission, token) != 0) {
-                response.setData(permission);
-                return response;
-            }
+        if (permissionService.save(permission, token) != 0) {
+            response.setData(permission);
+            return response;
         }
-        catch (BadRequestException e) {
-            log.error(e);
-        }
-
         response.setCodeMessage(ResponseCodeEnum.ERROR);
-
         return response;
     }
 
@@ -70,7 +61,7 @@ public class PermissionController {
     @DeleteMapping("/permission/{id}")
     public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        if (permissionService.delete(id,token) != 0) {
+        if (permissionService.delete(id, token) != 0) {
             return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);

@@ -15,9 +15,7 @@ import java.util.List;
 @Mapper
 public interface RoleMapper  extends CrudMapper<Role> {
 
-    List<String> getRoleNamesByUser(User user);
-
-    List<Long> getRoleIdsByUsername(@Param(value = "username") String username);
-
     Role getRoleByName(String name);
+
+    Role getRoleByUsername(String username);
 }

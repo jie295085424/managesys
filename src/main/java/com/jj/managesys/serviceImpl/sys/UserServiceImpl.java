@@ -3,6 +3,7 @@ package com.jj.managesys.serviceImpl.sys;
 import com.jj.managesys.common.utils.EncryUtils;
 import com.jj.managesys.common.utils.SpringHelper;
 import com.jj.managesys.domain.sys.Permission;
+import com.jj.managesys.domain.sys.Role;
 import com.jj.managesys.domain.sys.User;
 import com.jj.managesys.mapper.CrudMapper;
 import com.jj.managesys.mapper.sys.PermissionMapper;
@@ -76,23 +77,16 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
     @Override
     public List<Permission> getPermissionsByUsername(String username) {
 
-        RoleMapper roleMapper = SpringHelper.getBean(RoleMapper.class);
         PermissionMapper permissionMapper = SpringHelper.getBean(PermissionMapper.class);
-        List<Long> roleIds = roleMapper.getRoleIdsByUsername(username);
-        Set<Permission> permissions = new HashSet<>();
-        for(Long roleId : roleIds) {
-            permissions.addAll(permissionMapper.getPermissionsByRoleId(roleId));
-        }
-        return new ArrayList<>(permissions);
+        Role role = getRoleByUsername(username);
+        return permissionMapper.getPermissionsByRoleId(role.getId());
     }
 
     @Override
-    public String getRoleName(User user) {
+    public Role getRoleByUsername(String username) {
 
-        if(user.getRoleId() == 0) {
-            user = userMapper.selectByUsername(user.getUsername());
-        }
         RoleMapper roleMapper = SpringHelper.getBean(RoleMapper.class);
-        return roleMapper.selectById(user.getRoleId()).getName();
+        return roleMapper.getRoleByUsername(username);
     }
+
 }

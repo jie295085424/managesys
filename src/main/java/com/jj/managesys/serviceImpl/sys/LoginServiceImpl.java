@@ -1,14 +1,18 @@
 package com.jj.managesys.serviceImpl.sys;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jj.managesys.beans.sys.RoleUserDTO;
 import com.jj.managesys.common.enums.RedisTopicEnum;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
 import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.common.utils.EncryUtils;
 import com.jj.managesys.common.utils.TokenUtils;
+import com.jj.managesys.domain.sys.Role;
 import com.jj.managesys.domain.sys.User;
 import com.jj.managesys.service.sys.LoginService;
+import com.jj.managesys.service.sys.RoleService;
 import com.jj.managesys.service.sys.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -43,15 +47,14 @@ public class LoginServiceImpl implements LoginService {
             throw new BadRequestException(ResponseCodeEnum.LOGIN_USERNAME_PASSWORD_ERROR);
         }
 
-        String roleName = userService.getRoleName(user);
+        RoleUserDTO roleUserDTO = RoleUserDTO.builder()
+                .role(userService.getRoleByUsername(user.getUsername()))
+                .user(userService.selectByUsername(user.getUsername()))
+                .build();
 
         String token = TokenUtils.getInstance().getToken();
 
-        JSONObject auth = new JSONObject();
-        auth.put("username", user.getUsername());
-        auth.put("roleName", roleName);
-
-        redisTemplate.opsForValue().set(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token, auth.toJSONString(), 7L, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(RedisTopicEnum.TOKEN_TOPIC.getTopic() + token, JSON.toJSONString(roleUserDTO), 7L, TimeUnit.DAYS);
 
         return token;
     }

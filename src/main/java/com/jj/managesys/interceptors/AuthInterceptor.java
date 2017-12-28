@@ -6,6 +6,7 @@ package com.jj.managesys.interceptors;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jj.managesys.beans.sys.RoleUserDTO;
 import com.jj.managesys.common.HttpResponse;
 import com.jj.managesys.common.enums.RedisTopicEnum;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
@@ -50,8 +51,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        String username = JSON.parseObject(TokenUtils.getInstance().getAuth(token)).get("username").toString();
-        if("root".equals(username.trim())) {
+        RoleUserDTO roleUserDTO = TokenUtils.getInstance().getRoleUser(token);
+
+        if("root".equals(roleUserDTO.getUser().getUsername())) {
             return true;
         }
 
@@ -73,7 +75,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         UserService userService = SpringHelper.getBean(UserService.class);
-        List<Permission> permissionsInDB = userService.getPermissionsByUsername(username);
+        List<Permission> permissionsInDB = userService.getPermissionsByUsername(roleUserDTO.getUser().getUsername());
         isPermit = permissionsInDB.parallelStream()
                          .filter(permission -> href.startsWith(permission.getHref()) && method.equals(permission.getMethod()))
                          .collect(toList()).size();

@@ -2,6 +2,7 @@ package com.jj.managesys.serviceImpl.sys;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
+import com.jj.managesys.beans.sys.RoleUserDTO;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
 import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.common.utils.SpringHelper;
@@ -49,18 +50,11 @@ public class RoleServiceImpl extends CrudServiceImpl<Role> implements RoleServic
             throw new BadRequestException(ResponseCodeEnum.ROLE_SAVE_NAME_EXIST);
         }
 
-        String auth = TokenUtils.getInstance().getAuth(token);
+        RoleUserDTO roleUserDTO = TokenUtils.getInstance().getRoleUser(token);
 
-        if(StringUtils.isEmpty(auth)) {
-            return isSuccess;
-        }
-
-        Role operatorRole = roleMapper.getRoleByName(JSON.parseObject(auth).get("roleName").toString());
-
-        UserService userService = SpringHelper.getBean(UserService.class);
-
-        role.setCreateBy(userService.selectByUsername(JSON.parseObject(auth).get("username").toString()).getId());
-        role.setParents(new StringBuilder().append(operatorRole.getParents()).append(",").append(operatorRole.getId()).toString());
+        role.setCreateBy(roleUserDTO.getRole().getId());
+        role.setParents(new StringBuilder().append(roleUserDTO.getRole().getParents())
+                .append(",").append(roleUserDTO.getRole().getId()).toString());
 
         isSuccess = roleMapper.save(role);
 

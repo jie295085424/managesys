@@ -2,6 +2,7 @@ package com.jj.managesys.service.sys;
 
 
 import com.jj.managesys.domain.sys.Permission;
+import com.jj.managesys.domain.sys.Role;
 import com.jj.managesys.domain.sys.User;
 import com.jj.managesys.service.CrudService;
 
@@ -19,5 +20,5 @@ public interface UserService extends CrudService<User> {
 
     List<Permission> getPermissionsByUsername(String username);
 
-    String getRoleName(User user);
+    Role getRoleByUsername(String username);
 }
