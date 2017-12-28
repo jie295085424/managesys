@@ -21,4 +21,6 @@ public interface UserService extends CrudService<User> {
     List<Permission> getPermissionsByUsername(String username);
 
     Role getRoleByUsername(String username);
+
+    int deleteByRoleId(long id);
 }

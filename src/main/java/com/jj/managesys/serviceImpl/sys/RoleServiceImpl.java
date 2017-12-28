@@ -46,8 +46,12 @@ public class RoleServiceImpl extends CrudServiceImpl<Role> implements RoleServic
 
         int isSuccess = 0;
 
+        if(!validate(role)) {
+            throw new BadRequestException(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS);
+        }
+
         if(roleMapper.getRoleByName(role.getName()) != null) {
-            throw new BadRequestException(ResponseCodeEnum.ROLE_SAVE_NAME_EXIST);
+            throw new BadRequestException(ResponseCodeEnum.ROLE_SAVE_NAME_EXISTS);
         }
 
         RoleUserDTO roleUserDTO = TokenUtils.getInstance().getRoleUser(token);
@@ -62,11 +66,58 @@ public class RoleServiceImpl extends CrudServiceImpl<Role> implements RoleServic
     }
 
     @Override
-    public Page selectAll(int pageNum, int pageSize, String token) {
+    public int update(Role role, String token) throws BadRequestException {
 
+        if(!validate(role)) {
+            throw new BadRequestException(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS);
+        }
+        int isSuccess = 0;
 
-        return null;
+        RoleUserDTO roleUserDTO = TokenUtils.getInstance().getRoleUser(token);
+
+        if(!role.getParents().equals(new StringBuilder()
+                .append(roleUserDTO.getRole().getParents()).append(",")
+                .append(roleUserDTO.getRole().getId()).toString())) {
+
+            throw new BadRequestException(ResponseCodeEnum.PERMISSION_DENIED);
+        }
+
+        isSuccess = roleMapper.update(role);
+
+        return isSuccess;
     }
 
+    @Override
+    public int delete(long id, String token) throws BadRequestException {
+
+        int isSuccess = 0;
+
+        Role role = roleMapper.selectById(id);
+
+        RoleUserDTO roleUserDTO = TokenUtils.getInstance().getRoleUser(token);
+
+        if(!role.getParents().equals(new StringBuilder()
+                .append(roleUserDTO.getRole().getParents()).append(",")
+                .append(roleUserDTO.getRole().getId()).toString())) {
+
+            throw new BadRequestException(ResponseCodeEnum.PERMISSION_DENIED);
+        }
+
+        if(roleMapper.delete(id) > 0) {
+            UserService userService = SpringHelper.getBean(UserService.class);
+            isSuccess = userService.deleteByRoleId(id);
+        }
+
+        return isSuccess;
+    }
+
+
+
+    public boolean validate(Role role) {
+        if(StringUtils.isEmpty(role.getName())) {
+            return false;
+        }
+        return true;
+    }
 
 }

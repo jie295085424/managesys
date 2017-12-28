@@ -51,8 +51,12 @@ public class UserController {
     @PutMapping("/user")
     public HttpResponse update(@RequestBody User user, String token) {
         HttpResponse response = new HttpResponse();
-        if (userService.update(user, token) != 0) {
-            return response;
+        try {
+            if (userService.update(user, token) != 0) {
+                return response;
+            }
+        } catch (BadRequestException e) {
+            e.printStackTrace();
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;
@@ -61,8 +65,12 @@ public class UserController {
     @DeleteMapping("/user/{id}")
     public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        if (userService.delete(id, token) != 0) {
-            return response;
+        try {
+            if (userService.delete(id, token) != 0) {
+                return response;
+            }
+        } catch (BadRequestException e) {
+            e.printStackTrace();
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;

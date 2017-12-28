@@ -36,12 +36,12 @@ public abstract class CrudServiceImpl<T> implements CrudService<T> {
     }
 
     @Override
-    public int update(T t, String token) {
+    public int update(T t, String token) throws BadRequestException {
         return this.getMapper().update(t);
     }
 
     @Override
-    public int delete(long id, String token) {
+    public int delete(long id, String token) throws BadRequestException {
         return this.getMapper().delete(id);
     }
 }

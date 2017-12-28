@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -87,6 +84,11 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
 
         RoleMapper roleMapper = SpringHelper.getBean(RoleMapper.class);
         return roleMapper.getRoleByUsername(username);
+    }
+
+    @Override
+    public int deleteByRoleId(long id) {
+        return userMapper.deleteByRoleId(id);
     }
 
 }

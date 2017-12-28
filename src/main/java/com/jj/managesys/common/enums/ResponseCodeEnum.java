@@ -24,7 +24,8 @@ public enum  ResponseCodeEnum {
     TOKEN_ERROR(10406, "token已过时或无效！"),
     PERMISSION_DENIED(10407, "权限不足，拒绝访问！"),
 
-    ROLE_SAVE_NAME_EXIST(20401, "角色已存在！");
+    ROLE_SAVE_NAME_EXISTS(20401, "角色已存在！"),
+    ROLE_NAME_NOT_EXISTS(20402, "角色名称不能为空！");
 
     private int code;
     private String message;

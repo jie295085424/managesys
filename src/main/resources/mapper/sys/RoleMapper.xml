@@ -49,7 +49,7 @@
     </update>
 
     <delete id="delete" parameterType="java.lang.Long">
-        DELETE FROM sys_role WHERE id=#{id}
+        DELETE FROM sys_role AS r LEFT JOIN ON sys_role_permission AS rp ON r.id=rp.role_id WHERE r.id=#{id}
     </delete>
 
 

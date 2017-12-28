@@ -17,4 +17,5 @@ public interface UserMapper extends CrudMapper<User> {
 
     User selectByUsername(@Param(value = "username") String username);
 
+    int deleteByRoleId(long roleId);
 }

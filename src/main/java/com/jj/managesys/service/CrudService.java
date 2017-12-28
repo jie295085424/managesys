@@ -18,8 +18,8 @@ public interface CrudService<T> {
 
     int save(T t, String token) throws BadRequestException;
 
-    int update(T t, String token);
+    int update(T t, String token) throws BadRequestException;
 
-    int delete(long id, String token);
+    int delete(long id, String token) throws BadRequestException;
 
 }

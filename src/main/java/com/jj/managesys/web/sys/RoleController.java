@@ -34,9 +34,13 @@ public class RoleController {
             }
         }
         catch (BadRequestException e) {
-            if(e.getMessage().equals(ResponseCodeEnum.ROLE_SAVE_NAME_EXIST.getMessage())) {
-                response.setCodeMessage(ResponseCodeEnum.ROLE_SAVE_NAME_EXIST);
+            if(e.getMessage().equals(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS.getMessage())) {
+                response.setCodeMessage(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS);
             }
+            if(e.getMessage().equals(ResponseCodeEnum.ROLE_SAVE_NAME_EXISTS.getMessage())) {
+                response.setCodeMessage(ResponseCodeEnum.ROLE_SAVE_NAME_EXISTS);
+            }
+            return response;
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;
@@ -59,8 +63,16 @@ public class RoleController {
     @PutMapping("/role")
     public HttpResponse update(@RequestBody Role role, String token) {
         HttpResponse response = new HttpResponse();
-        if (roleService.update(role, token) != 0) {
-            return response;
+        try {
+            if (roleService.update(role, token) != 0) {
+                return response;
+            }
+        } catch (BadRequestException e) {
+            log.error(e);
+            if(e.getMessage().equals(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS.getMessage())) {
+                response.setCodeMessage(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS);
+                return response;
+            }
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;
@@ -69,8 +81,16 @@ public class RoleController {
     @DeleteMapping("/role/{id}")
     public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        if (roleService.delete(id, token) != 0) {
-            return response;
+        try {
+            if (roleService.delete(id, token) != 0) {
+                return response;
+            }
+        } catch (BadRequestException e) {
+            log.error(e);
+            if(e.getMessage().equals(ResponseCodeEnum.PERMISSION_DENIED.getMessage())) {
+                response.setCodeMessage(ResponseCodeEnum.PERMISSION_DENIED);
+                return response;
+            }
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;

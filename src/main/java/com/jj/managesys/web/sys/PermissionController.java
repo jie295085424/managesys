@@ -49,7 +49,7 @@ public class PermissionController {
     }
 
     @PutMapping("/permission")
-    public HttpResponse update(@RequestBody Permission permission, String token) {
+    public HttpResponse update(@RequestBody Permission permission, String token) throws BadRequestException {
         HttpResponse response = new HttpResponse();
         if (permissionService.update(permission, token) != 0) {
             return response;
@@ -61,8 +61,12 @@ public class PermissionController {
     @DeleteMapping("/permission/{id}")
     public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
-        if (permissionService.delete(id, token) != 0) {
-            return response;
+        try {
+            if (permissionService.delete(id, token) != 0) {
+                return response;
+            }
+        } catch (BadRequestException e) {
+            e.printStackTrace();
         }
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;
