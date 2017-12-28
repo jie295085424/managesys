@@ -65,6 +65,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         HttpResponse response = new HttpResponse();
         response.setCodeMessage(codeEnum);
+
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json; charset=utf-8");
         try {
