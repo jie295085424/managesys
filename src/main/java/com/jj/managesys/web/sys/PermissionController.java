@@ -1,6 +1,8 @@
 package com.jj.managesys.web.sys;
 
+import com.jj.managesys.annotation.AuthValidate;
 import com.jj.managesys.common.HttpResponse;
+import com.jj.managesys.common.enums.MethodEnum;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
 import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.domain.sys.Permission;
@@ -24,6 +26,7 @@ public class PermissionController {
     private PermissionService permissionService;
 
     @PostMapping("/permission")
+    @AuthValidate(URL = "/sys/permission", Roles = {"Root"}, Method = MethodEnum.SAVE)
     public HttpResponse save(Permission permission, String token) throws BadRequestException {
         HttpResponse response = new HttpResponse();
         if (permissionService.save(permission, token) != 0) {
@@ -35,6 +38,7 @@ public class PermissionController {
     }
 
     @GetMapping("/permission/{id}")
+    @AuthValidate(URL = "/sys/permission", Roles = {"Root"}, Method = MethodEnum.GET)
     public HttpResponse selectById(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
         response.setData(permissionService.selectById(id, token));
@@ -42,6 +46,7 @@ public class PermissionController {
     }
 
     @GetMapping("/permission")
+    @AuthValidate(URL = "/sys/permission", Roles = {"Root"}, Method = MethodEnum.GET)
     public HttpResponse selectAll(int pageNum, int pageSize, String token) {
         HttpResponse response = new HttpResponse();
         response.setData(permissionService.selectAll(pageNum, pageSize, token));
@@ -49,6 +54,7 @@ public class PermissionController {
     }
 
     @PutMapping("/permission")
+    @AuthValidate(URL = "/sys/permission", Roles = {"Root"}, Method = MethodEnum.UPDATE)
     public HttpResponse update(@RequestBody Permission permission, String token) throws BadRequestException {
         HttpResponse response = new HttpResponse();
         if (permissionService.update(permission, token) != 0) {
@@ -59,6 +65,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("/permission/{id}")
+    @AuthValidate(URL = "/sys/permission", Roles = {"Root"}, Method = MethodEnum.DELETE)
     public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
         try {

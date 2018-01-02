@@ -1,6 +1,8 @@
 package com.jj.managesys.web.sys;
 
+import com.jj.managesys.annotation.AuthValidate;
 import com.jj.managesys.common.HttpResponse;
+import com.jj.managesys.common.enums.MethodEnum;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
 import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.domain.sys.User;
@@ -24,6 +26,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/user")
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.SAVE)
     public HttpResponse save(User user, String token) throws BadRequestException {
         HttpResponse response = new HttpResponse();
         if (userService.save(user, token) != 0) {
@@ -35,6 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}")
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.GET)
     public HttpResponse selectById(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
         response.setData(userService.selectById(id, token));
@@ -42,6 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.GET)
     public HttpResponse selectAll(int pageNum, int pageSize, String token) {
         HttpResponse response = new HttpResponse();
         response.setData(userService.selectAll(pageNum, pageSize, token));
@@ -49,6 +54,7 @@ public class UserController {
     }
 
     @PutMapping("/user")
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.UPDATE)
     public HttpResponse update(@RequestBody User user, String token) {
         HttpResponse response = new HttpResponse();
         try {
@@ -63,6 +69,7 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.DELETE)
     public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
         try {

@@ -20,8 +20,6 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-
 /**
  * @author huangjunjie
  * @ClassName RoleServiceImpl
@@ -73,12 +71,7 @@ public class RoleServiceImpl extends CrudServiceImpl<Role> implements RoleServic
         }
         int isSuccess = 0;
 
-        RoleUserDTO roleUserDTO = TokenUtils.getInstance().getRoleUser(token);
-
-        if(!role.getParents().equals(new StringBuilder()
-                .append(roleUserDTO.getRole().getParents()).append(",")
-                .append(roleUserDTO.getRole().getId()).toString())) {
-
+        if(!validatePermission(token, role)) {
             throw new BadRequestException(ResponseCodeEnum.PERMISSION_DENIED);
         }
 
@@ -94,12 +87,7 @@ public class RoleServiceImpl extends CrudServiceImpl<Role> implements RoleServic
 
         Role role = roleMapper.selectById(id);
 
-        RoleUserDTO roleUserDTO = TokenUtils.getInstance().getRoleUser(token);
-
-        if(!role.getParents().equals(new StringBuilder()
-                .append(roleUserDTO.getRole().getParents()).append(",")
-                .append(roleUserDTO.getRole().getId()).toString())) {
-
+        if(!validatePermission(token, role)) {
             throw new BadRequestException(ResponseCodeEnum.PERMISSION_DENIED);
         }
 
@@ -112,9 +100,20 @@ public class RoleServiceImpl extends CrudServiceImpl<Role> implements RoleServic
     }
 
 
-
     public boolean validate(Role role) {
         if(StringUtils.isEmpty(role.getName())) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePermission(String token, Role role) {
+        RoleUserDTO roleUserDTO = TokenUtils.getInstance().getRoleUser(token);
+
+        if(!role.getParents().equals(new StringBuilder()
+                .append(roleUserDTO.getRole().getParents()).append(",")
+                .append(roleUserDTO.getRole().getId()).toString())) {
+
             return false;
         }
         return true;
