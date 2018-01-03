@@ -22,7 +22,7 @@ public class WebMvcConfigure extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/sys/login");
+                .excludePathPatterns("/sys/login","/swagger-resources/**","/error");
         super.addInterceptors(registry);
     }
 }

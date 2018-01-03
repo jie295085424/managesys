@@ -1,6 +1,8 @@
 package com.jj.managesys.web.sys;
 
+import com.jj.managesys.annotation.AuthValidate;
 import com.jj.managesys.common.HttpResponse;
+import com.jj.managesys.common.enums.MethodEnum;
 import com.jj.managesys.common.enums.ResponseCodeEnum;
 import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.domain.sys.Role;
@@ -24,7 +26,8 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/role")
-    public HttpResponse save(Role role, String token)  {
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.SAVE)
+    public HttpResponse save(Role role, String token) {
 
         HttpResponse response = new HttpResponse();
         try {
@@ -32,12 +35,11 @@ public class RoleController {
                 response.setData(role);
                 return response;
             }
-        }
-        catch (BadRequestException e) {
-            if(e.getMessage().equals(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS.getMessage())) {
+        } catch (BadRequestException e) {
+            if (e.getMessage().equals(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS.getMessage())) {
                 response.setCodeMessage(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS);
             }
-            if(e.getMessage().equals(ResponseCodeEnum.ROLE_SAVE_NAME_EXISTS.getMessage())) {
+            if (e.getMessage().equals(ResponseCodeEnum.ROLE_SAVE_NAME_EXISTS.getMessage())) {
                 response.setCodeMessage(ResponseCodeEnum.ROLE_SAVE_NAME_EXISTS);
             }
             return response;
@@ -47,6 +49,7 @@ public class RoleController {
     }
 
     @GetMapping("/role/{id}")
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.GET)
     public HttpResponse selectById(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
         response.setData(roleService.selectById(id, token));
@@ -54,6 +57,7 @@ public class RoleController {
     }
 
     @GetMapping("/role")
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.GET)
     public HttpResponse selectAll(int pageNum, int pageSize, String token) {
         HttpResponse response = new HttpResponse();
         response.setData(roleService.selectAll(pageNum, pageSize, token));
@@ -61,6 +65,7 @@ public class RoleController {
     }
 
     @PutMapping("/role")
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.UPDATE)
     public HttpResponse update(@RequestBody Role role, String token) {
         HttpResponse response = new HttpResponse();
         try {
@@ -69,7 +74,7 @@ public class RoleController {
             }
         } catch (BadRequestException e) {
             log.error(e);
-            if(e.getMessage().equals(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS.getMessage())) {
+            if (e.getMessage().equals(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS.getMessage())) {
                 response.setCodeMessage(ResponseCodeEnum.ROLE_NAME_NOT_EXISTS);
                 return response;
             }
@@ -79,6 +84,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/role/{id}")
+    @AuthValidate(URL = "/sys/role", Roles = {"Root", "Admin"}, Method = MethodEnum.DELETE)
     public HttpResponse delete(@PathVariable long id, String token) {
         HttpResponse response = new HttpResponse();
         try {
@@ -87,7 +93,7 @@ public class RoleController {
             }
         } catch (BadRequestException e) {
             log.error(e);
-            if(e.getMessage().equals(ResponseCodeEnum.PERMISSION_DENIED.getMessage())) {
+            if (e.getMessage().equals(ResponseCodeEnum.PERMISSION_DENIED.getMessage())) {
                 response.setCodeMessage(ResponseCodeEnum.PERMISSION_DENIED);
                 return response;
             }
@@ -95,4 +101,5 @@ public class RoleController {
         response.setCodeMessage(ResponseCodeEnum.ERROR);
         return response;
     }
+
 }

@@ -4,10 +4,14 @@
  */
 package com.jj.managesys.beans.sys;
 
+import com.jj.managesys.domain.sys.Permission;
+import com.jj.managesys.domain.sys.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @author huangjunjie
@@ -21,7 +25,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RolePermission {
 
-    private long id;
-    private long roleId;
-    private long permissionId;
+    private Role role;
+    private List<Permission> permissions;
 }

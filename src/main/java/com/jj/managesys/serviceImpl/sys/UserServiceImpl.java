@@ -1,7 +1,11 @@
 package com.jj.managesys.serviceImpl.sys;
 
+import com.jj.managesys.beans.sys.RoleUserDTO;
+import com.jj.managesys.common.enums.ResponseCodeEnum;
+import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.common.utils.EncryUtils;
 import com.jj.managesys.common.utils.SpringHelper;
+import com.jj.managesys.common.utils.TokenUtils;
 import com.jj.managesys.domain.sys.Permission;
 import com.jj.managesys.domain.sys.Role;
 import com.jj.managesys.domain.sys.User;
@@ -40,7 +44,11 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
     }
 
     @Override
-    public int save(User user, String token) {
+    public int save(User user, String token) throws BadRequestException {
+
+        if(!validatePermission(user, token)) {
+            throw new BadRequestException(ResponseCodeEnum.PERMISSION_DENIED);
+        }
 
         int isSuccess = 0;
         try {
@@ -49,11 +57,16 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
         } catch (Exception e) {
             log.error(e);
         }
+
         return isSuccess;
     }
 
     @Override
-    public int update(User user, String token) {
+    public int update(User user, String token) throws BadRequestException {
+
+        if(!validatePermission(user, token)) {
+            throw new BadRequestException(ResponseCodeEnum.PERMISSION_DENIED);
+        }
 
         int isSuccess = 0;
         try {
@@ -88,7 +101,22 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
 
     @Override
     public int deleteByRoleId(long id) {
+
         return userMapper.deleteByRoleId(id);
+    }
+
+    private boolean validatePermission(User user, String token) {
+
+        RoleUserDTO roleUserDTO = TokenUtils.getInstance().getRoleUser(token);
+        Role role = SpringHelper.getBean(RoleMapper.class).selectById(user.getRoleId());
+
+        if(!role.getParents().equals(new StringBuilder()
+                .append(roleUserDTO.getRole().getParents()).append(",")
+                .append(roleUserDTO.getRole().getId()).toString())) {
+
+            return false;
+        }
+        return true;
     }
 
 }
