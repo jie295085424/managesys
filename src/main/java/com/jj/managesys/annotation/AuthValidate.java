@@ -20,6 +20,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface AuthValidate {
 
+
     String URL() default "";
 
     String[] Roles() default {"Admin"};
