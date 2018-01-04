@@ -21,10 +21,20 @@ public class TokenUtils {
     private TokenUtils() {
     }
 
+/*    //饿汉式
     private static TokenUtils instance = new TokenUtils();
 
     public static TokenUtils getInstance() {
         return instance;
+    }*/
+
+    //ioDH(Initialization Demand Holder,初始化需求持有者)
+    private static class TokenUtilsHolder {
+        private static final TokenUtils instance = new TokenUtils();
+    }
+
+    public static TokenUtils getInstance() {
+        return TokenUtilsHolder.instance;
     }
 
     public String getToken() throws UnsupportedEncodingException, NoSuchAlgorithmException {
