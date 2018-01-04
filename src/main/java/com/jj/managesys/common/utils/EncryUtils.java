@@ -16,11 +16,15 @@ public class EncryUtils {
     private EncryUtils() {
     }
 
-    private static EncryUtils instance = null;
+    private volatile static EncryUtils instance = null;
 
     public static EncryUtils getInstance() {
         if(instance == null) {
-            instance = new EncryUtils();
+            synchronized (EncryUtils.class) {
+                if(instance == null) {
+                    instance = new EncryUtils();
+                }
+            }
         }
         return instance;
     }

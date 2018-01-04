@@ -21,14 +21,9 @@ public class TokenUtils {
     private TokenUtils() {
     }
 
-    private static TokenUtils instance = null;
+    private static TokenUtils instance = new TokenUtils();
 
     public static TokenUtils getInstance() {
-
-        if(instance == null) {
-            instance = new TokenUtils();
-        }
-
         return instance;
     }
 

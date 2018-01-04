@@ -18,12 +18,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpringHelper implements ApplicationContextAware {
 
-    private static ApplicationContext context = null;
+    private volatile static ApplicationContext context = null;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if(context == null) {
-            context = applicationContext;
+            synchronized (SpringHelper.class) {
+                if(context == null) {
+                    context = applicationContext;
+                }
+            }
         }
     }
 
