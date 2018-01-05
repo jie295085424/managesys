@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -83,7 +84,8 @@ public class AuthInterceptor implements HandlerInterceptor {
             if (!StringUtils.isEmpty(permissions)) {
                 List<Permission> permissionsInCache = JSON.parseArray(permissions, Permission.class);
                 isPermit = permissionsInCache.parallelStream()
-                        .filter(permission -> authValidate.URL().equalsIgnoreCase(permission.getHref()) && authValidate.Method().getMethod().equalsIgnoreCase(permission.getMethod()))
+                        .filter(permission -> authValidate.URL().equalsIgnoreCase(permission.getHref())
+                                && authValidate.Method().getMethod().equalsIgnoreCase(permission.getMethod()))
                         .collect(toList()).size();
                 if (isPermit > 0) {
                     return true;
@@ -93,7 +95,8 @@ public class AuthInterceptor implements HandlerInterceptor {
             UserService userService = SpringHelper.getBean(UserService.class);
             List<Permission> permissionsInDB = userService.getPermissionsByUsername(roleUserDTO.getUser().getUsername());
             isPermit = permissionsInDB.parallelStream()
-                    .filter(permission -> authValidate.URL().equalsIgnoreCase(permission.getHref()) && authValidate.Method().getMethod().equalsIgnoreCase(permission.getMethod()))
+                    .filter(permission -> authValidate.URL().equalsIgnoreCase(permission.getHref())
+                            && authValidate.Method().getMethod().equalsIgnoreCase(permission.getMethod()))
                     .collect(toList()).size();
             if (isPermit > 0) {
                 redisTemplate.opsForValue().set(RedisTopicEnum.PERMISSION_TOPIC.getTopic() + token, JSON.toJSONString(permissionsInDB), 12L, TimeUnit.HOURS);
@@ -126,8 +129,8 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json; charset=utf-8");
-        try {
-            httpServletResponse.getWriter().write(JSON.toJSONString(response));
+        try(PrintWriter writer = httpServletResponse.getWriter()) {
+            writer.write(JSON.toJSONString(response));
         } catch (IOException e) {
             log.error(e);
         }
