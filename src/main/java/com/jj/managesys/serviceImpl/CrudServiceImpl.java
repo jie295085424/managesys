@@ -1,12 +1,11 @@
 package com.jj.managesys.serviceImpl;
-
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.mapper.CrudMapper;
 import com.jj.managesys.service.CrudService;
-
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author huangjunjie
@@ -25,9 +24,13 @@ public abstract class CrudServiceImpl<T> implements CrudService<T> {
     }
 
     @Override
-    public Page<T> selectAll(int pageNum, int pageSize, String token)
+    public Map selectAll(int pageNum, int pageSize, String token)
     {
-        return PageHelper.startPage(pageSize, pageNum, true).doSelectPage(() -> this.getMapper().selectAll());
+        Page<T> p = PageHelper.startPage(pageNum, pageSize, true).doSelectPage(() -> this.getMapper().selectAll());
+        Map map = new HashMap();
+        map.put("count", p.getTotal());
+        map.put("dataList", p.getResult());
+        return map;
     }
 
     @Override

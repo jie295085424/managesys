@@ -1,7 +1,8 @@
 package com.jj.managesys.service;
 
-import com.github.pagehelper.Page;
 import com.jj.managesys.common.exceptions.BadRequestException;
+
+import java.util.Map;
 
 
 /**
@@ -14,7 +15,7 @@ public interface CrudService<T> {
 
     T selectById(long id, String token);
 
-    Page<T> selectAll(int pageNum, int pageSize, String token);
+    Map selectAll(int pageNum, int pageSize, String token);
 
     int save(T t, String token) throws BadRequestException;
 
