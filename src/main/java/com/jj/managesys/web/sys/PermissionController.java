@@ -9,6 +9,7 @@ import com.jj.managesys.common.exceptions.BadRequestException;
 import com.jj.managesys.domain.sys.Permission;
 import com.jj.managesys.service.sys.PermissionService;
 import lombok.extern.log4j.Log4j2;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +49,8 @@ public class PermissionController {
 
     @GetMapping("/permission")
     @AuthValidate(URL = "/sys/permission", Roles = {"Root"}, Method = MethodEnum.GET)
-    public HttpResponse selectAll(int pageNum, int pageSize, String token) {
+    public HttpResponse selectAll(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "8") int pageSize, String token) {
         HttpResponse response = new HttpResponse();
         response.setData(permissionService.selectAll(pageNum, pageSize, token));
         return response;
